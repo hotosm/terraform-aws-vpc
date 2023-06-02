@@ -148,7 +148,7 @@ resource "aws_ec2_managed_prefix_list" "admin-v4" {
 
 resource "aws_ec2_managed_prefix_list" "admin-v6" {
   address_family = "IPv6"
-  name           = "Admin IPv4 Prefix List"
+  name           = "Admin IPv6 Prefix List"
   max_entries    = 20
 
   lifecycle {
