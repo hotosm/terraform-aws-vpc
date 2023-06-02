@@ -83,10 +83,24 @@ $ terraform plan
 - `deployment_environment` - A string indicator of the deployment environment or flavour or variant of the deployment. No defaults set.
 - `default_tags` - A map of tag keys and values with basic keys and empty values by default
 
-## License
-
-The project is licensed under GNU LGPL. Please make any modifications to this module public. Read LICENSE, COPYING.LESSER, and COPYING files for license text
-
 ## References
 
 [ref1]: AWS Documentation VPC CIDR blocks - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html
+
+## Copyright and License texts
+
+The project is licensed under GNU LGPL. Please make any modifications to this module public. Read LICENSE, COPYING.LESSER, and COPYING files for license text
+
+Copyright (C) 2023 eternaltyro
+This file is part of Terraform AWS VPC Module aka terraform-aws-vpc project
+
+terraform-aws-vpc is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License.
+
+terraform-aws-vpc is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+License text can be found in the repository

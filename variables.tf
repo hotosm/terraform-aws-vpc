@@ -17,6 +17,7 @@ variable "project_meta" {
     name       = ""
     short_name = ""
     version    = ""
+    url        = ""
   }
 }
 
