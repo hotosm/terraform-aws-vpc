@@ -4,7 +4,7 @@ This is a terraform module that brings up a full AWS VPC with all the bells and 
 
 This module helps deploy the following AWS resources
 
-1. A primary VPC - the star of the show - with a modified RFC1918 IP space[^ref1] in compliance with AWS restrictions
+1. A primary VPC - the star of the show - with a modified RFC1918 IP space [^ref1] in compliance with AWS restrictions
 2. An Internet gatway associated with the VPC
 3. A NAT gateway for IPv4 and IPv6 egress traffic
 4. An egress-only internet gateway for outgoing IPv6 traffic
@@ -89,4 +89,4 @@ The project is licensed under GNU LGPL. Please make any modifications to this mo
 
 ## References
 
-[ref1] AWS Documentation VPC CIDR blocks - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html
+[ref1]: AWS Documentation VPC CIDR blocks - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html
