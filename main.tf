@@ -157,3 +157,32 @@ resource "aws_ec2_managed_prefix_list" "admin-v6" {
     ]
   }
 }
+
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.primary.id
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
+
+  ingress {
+    description = "Allow SSH access from user-managed prefix-lists"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    prefix_list_ids = [
+      aws_ec2_managed_prefix_list.admin-v4.id,
+      aws_ec2_managed_prefix_list.admin-v6.id
+    ]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
