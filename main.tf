@@ -25,6 +25,11 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.primary.id
   availability_zone = each.value
 
+  map_public_ip_on_launch         = false
+  ipv6_native                     = false
+  assign_ipv6_address_on_creation = true
+  enable_dns64                    = true
+
   cidr_block = cidrsubnet(
     aws_vpc.primary.cidr_block, 8, each.key
   )
@@ -42,6 +47,11 @@ resource "aws_subnet" "private" {
   for_each          = local.az_indexed_map
   vpc_id            = aws_vpc.primary.id
   availability_zone = each.value
+
+  map_public_ip_on_launch         = false
+  ipv6_native                     = false
+  assign_ipv6_address_on_creation = true
+  enable_dns64                    = true
 
   cidr_block = cidrsubnet(
     aws_vpc.primary.cidr_block, 8, each.key + local.az_count
