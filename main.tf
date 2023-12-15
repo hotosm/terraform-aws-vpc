@@ -66,8 +66,40 @@ resource "aws_subnet" "private" {
   }
 }
 
+resource "aws_subnet" "ipv6-only" {
+  for_each          = local.az_indexed_map
+  vpc_id            = aws_vpc.primary.id
+  availability_zone = each.value
+
+  ipv6_native                                    = true
+  assign_ipv6_address_on_creation                = true
+  enable_dns64                                   = true
+  enable_resource_name_dns_aaaa_record_on_launch = true
+
+  ipv6_cidr_block = cidrsubnet(
+    aws_vpc.primary.ipv6_cidr_block, 8, each.key + (local.az_count * 2)
+  )
+
+  tags = {
+    Name = join("-", ["IPv6-only", each.value])
+  }
+}
+
+resource "aws_eip" "ngw" {
+  domain = "vpc"
+}
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.primary.id
+}
+
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.ngw.allocation_id
+  subnet_id     = aws_subnet.public[1].id
+
+  depends_on = [
+    aws_internet_gateway.igw
+  ]
 }
 
 resource "aws_egress_only_internet_gateway" "eigw" {
@@ -87,6 +119,11 @@ resource "aws_route_table" "public" {
     gateway_id      = aws_internet_gateway.igw.id
   }
 
+  route {
+    ipv6_cidr_block = "64:ff9b::/96"
+    nat_gateway_id  = aws_nat_gateway.ngw.id
+  }
+
   tags = {
     Name = "Public Routes"
   }
@@ -100,6 +137,11 @@ resource "aws_route_table" "private" {
     egress_only_gateway_id = aws_egress_only_internet_gateway.eigw.id
   }
 
+  route {
+    ipv6_cidr_block = "64:ff9b::/96"
+    nat_gateway_id  = aws_nat_gateway.ngw.id
+  }
+
   tags = {
     Name = "Private Routes"
   }
@@ -107,8 +149,9 @@ resource "aws_route_table" "private" {
 
 // NOTE: See why this is necessary in the comment below
 locals {
-  private_subnets = [for subnet in aws_subnet.private : subnet.id]
-  public_subnets  = [for subnet in aws_subnet.public : subnet.id]
+  private_subnets   = [for subnet in aws_subnet.private : subnet.id]
+  public_subnets    = [for subnet in aws_subnet.public : subnet.id]
+  ipv6_only_subnets = [for subnet in aws_subnet.ipv6-only : subnet.id]
 }
 
 // NOTE: We could in theory have the following in place
@@ -120,6 +163,12 @@ locals {
 //
 resource "aws_route_table_association" "private" {
   for_each       = zipmap(range(local.az_count), local.private_subnets)
+  subnet_id      = each.value
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "ipv6-only" {
+  for_each       = zipmap(range(local.az_count), local.ipv6_only_subnets)
   subnet_id      = each.value
   route_table_id = aws_route_table.private.id
 }
@@ -176,10 +225,11 @@ resource "aws_default_security_group" "default" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   depends_on = [
