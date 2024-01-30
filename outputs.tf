@@ -27,3 +27,9 @@ output "ipv6_prefix_list_id" {
 
   description = "ID of the prefix list with IPv6 addresses; Use this for security group SSH allow-lists"
 }
+
+output "default_security_group_id" {
+  value = aws_default_security_group.default.id
+
+  description = "Default Security Group ID for the VPC"
+}
