@@ -11,14 +11,12 @@ variable "aws_rfc1918" {
 
 variable "project_meta" {
   description = "Metadata relating to the project for which the VPC is being created"
-  type        = map(string)
-
-  default = {
-    name       = ""
-    short_name = ""
-    version    = ""
-    url        = ""
-  }
+  type = object({
+    name       = string
+    short_name = string
+    version    = string
+    url        = string
+  })
 }
 
 variable "deployment_environment" {
@@ -28,14 +26,12 @@ variable "deployment_environment" {
 
 variable "default_tags" {
   description = "Default resource tags to apply to AWS resources"
-  type        = map(string)
-
-  default = {
-    project        = ""
-    maintainer     = ""
-    documentation  = ""
-    cost_center    = ""
-    IaC_Management = "Terraform"
-  }
+  type = object({
+    project        = string
+    maintainer     = string
+    documentation  = string
+    cost_center    = string
+    IaC_Management = string
+  })
 }
 
