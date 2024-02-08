@@ -26,12 +26,14 @@ variable "deployment_environment" {
 
 variable "default_tags" {
   description = "Default resource tags to apply to AWS resources"
-  type = object({
-    project        = string
-    maintainer     = string
-    documentation  = string
-    cost_center    = string
-    IaC_Management = string
-  })
+  type        = map(string)
+
+  default = {
+    project        = null
+    maintainer     = null
+    documentation  = null
+    cost_center    = null
+    IaC_Management = "Terraform"
+  }
 }
 
