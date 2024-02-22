@@ -6,6 +6,9 @@ resource "aws_vpc" "primary" {
   cidr_block                       = element(var.aws_rfc1918, 1)
   assign_generated_ipv6_cidr_block = true
 
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
   tags = {
     Name = join("-", [
       lookup(var.project_meta, "short_name"),
