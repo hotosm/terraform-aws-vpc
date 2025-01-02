@@ -11,8 +11,10 @@ resource "aws_vpc" "primary" {
 
   tags = {
     Name = join("-", [
-      lookup(var.project_meta, "short_name"),
-      var.deployment_environment
+      lookup(var.project_meta, "project"),
+      lookup(var.project_meta, "team"),
+      var.deployment_environment,
+      "vpc",
       ]
     )
   }

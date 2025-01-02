@@ -14,6 +14,7 @@ variable "project_meta" {
   type = object({
     name       = string
     short_name = string
+    team       = string
     version    = string
     url        = string
   })
@@ -35,5 +36,11 @@ variable "default_tags" {
     cost_center    = null
     IaC_Management = "Terraform"
   }
+}
+
+variable "availability_zone" {
+  description = "Specify availability zones to create subnets. Use 'all' for all available zones, or provide specific zones as a list."
+  type        = string
+  default     = "all"
 }
 
