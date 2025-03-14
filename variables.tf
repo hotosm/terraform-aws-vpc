@@ -1,46 +1,29 @@
-variable "aws_rfc1918" {
-  description = "Modified RFC 1918 CIDR with AWS minimum /16 prefixes"
-  type        = list(string)
-
-  default = [
-    "10.0.0.0/16",
-    "172.31.0.0/16",
-    "192.168.0.0/16"
-  ]
+variable "vpc_id" {
+  description = "VPC ID of the primary VPC created by the VPC module"
+  default = null
 }
 
-variable "project_meta" {
-  description = "Metadata relating to the project for which the VPC is being created"
-  type = object({
-    name       = string
-    short_name = string
-    team       = string
-    version    = string
-    url        = string
-  })
+variable "public_subnets" {
+  description = "List of public subnet IDs"
+  default = null
 }
 
-variable "deployment_environment" {
-  description = "Deployment flavour or variant identified by this name"
-  type        = string
+variable "private_subnets" {
+  description = "List of public subnet IDs"
+  default = null
 }
 
-variable "default_tags" {
-  description = "Default resource tags to apply to AWS resources"
-  type        = map(string)
-
-  default = {
-    project        = null
-    maintainer     = null
-    documentation  = null
-    cost_center    = null
-    IaC_Management = "Terraform"
-  }
+variable "ipv4_prefix_list_id" {
+  description = "ID of the prefix list with IPv4 addresses; Use this for security group SSH allow-lists"
+  default = null
 }
 
-variable "availability_zone" {
-  description = "Specify availability zones to create subnets. Use 'all' for all available zones, or provide specific zones as a list."
-  type        = string
-  default     = "all"
+variable "ipv6_prefix_list_id" {
+  description = "ID of the prefix list with IPv6 addresses; Use this for security group SSH allow-lists"
+  default = null
 }
 
+variable "default_security_group_id" {
+  description = "Default Security Group ID for the VPC"
+  default = null
+}
