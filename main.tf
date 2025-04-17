@@ -11,10 +11,11 @@ resource "aws_vpc" "primary" {
 
   tags = {
     Name = join("-", [
-      lookup(var.project_meta, "short_name"),
-      var.deployment_environment
-      ]
-    )
+      lookup(var.project_meta, "name", "tasking-manager"),
+      lookup(var.project_meta, "team", "hotosm"), 
+      var.deployment_environment,
+      "vpc",
+    ])
   }
 }
 
